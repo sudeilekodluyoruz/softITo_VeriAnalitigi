@@ -51,3 +51,29 @@ Kurduğumuz modeli Rapor Görünümünde (Report View) test ettik:
 Model görünümünde tabloları birbirine bağlarken ilişki türlerine ve veri bütünlüğüne dikkat ettik:
 *   **Bire-Çok İlişki (1:*):** Dimension (1) tablosundan Fact (*) tablosuna doğru kurulan en yaygın ilişki türüdür. Model ekranında bu ilişki `1` ve `*` simgeleri ile görülebilir.
 *   Filtreleme akışının (Cross filter direction) her zaman Dimension tablosundan Fact tablosuna doğru (tek yönlü oklu çizgi) ilerlemesini sağladık. Hatalı hesaplamaların önüne geçmek için çift yönlü (Both) filtrelemeden zorunlu kalmadıkça kaçındık.
+
+  ## 13. Gün: Power BI'da Veri Modelleme: Yıldız (Star) ve Kar Tanesi (Snowflake) Şemaları (28 Ekim 2026)
+
+Bugün Power BI üzerinde veri modeli optimizasyonları ve şema tasarımları üzerine çalıştık. Geniş (wide) formatta gelen ham verileri daha performanslı olan *Olgu (Fact)* ve *Boyut (Dimension)* tablolarına ayırarak **Yıldız Şema (Star Schema)** ve **Kar Tanesi Şeması (Snowflake Schema)** yapılarını adım adım kurguladık.
+
+### 1. Veriyi Olgulara ve Boyutlara Ayırma (Yıldız Şema)
+Geniş veri setlerini (`Establishment Survey.csv`) doğrudan kullanmak yerine, verileri ölçülebilir olgular (Fact) ve açıklayıcı boyutlar (Dimension) olarak ikiye ayırdık. Bu işlem Power BI'da sorgu performansını büyük ölçüde artırır.
+* **Boyut Tablosu Oluşturma:** `Establishment Survey` sorgusunu Power Query'de çoğaltıp (Duplicate) `Industry` (Sektör) adını verdik. Yalnızca sektörel hiyerarşi sütunlarını (`NAICS code`, `Sector`, `Subsector` vb.) bırakıp **yinelenen değerleri (duplicates) temizledik**.
+* **Olgu Tablosunu Sadeleştirme:** Ana olgu (Fact) tablomuz olan `Establishment Survey` içindeki açıklayıcı metin sütunlarını sildik. İki tabloyu birbirine bağlamak için sadece **`NAICS code`** sütununu birincil anahtar (Primary Key) olarak koruduk.
+* **Görselleştirme:** Elde ettiğimiz bu yapıdan Model görünümünde ilişki kurduk. Ardından Rapor görünümünde `Subsector`'ü eksen (Axis), `Average Number of employees`'i değer (Values) olarak atayarak Küme Çubuk Grafiği (Clustered Bar Chart) oluşturduk.
+
+### 2. Modele Dışarıdan Yeni Boyutlar (Dimensions) Ekleme
+Sadece olgu tablosundan türettiğimiz boyutlarla kalmayıp, modele dışarıdan açıklayıcı veri setleri dahil ettik:
+* **Zaman Boyutu (Time Dimension):** `Time.txt` dosyasını içe aktarıp `Year` (Yıl) sütunu üzerinden olgu tablosuna bağladık. Bu, verileri yalnızca yıla göre değil, on yıllık (Decade) veya yüzyıllık periyotlarla da analiz edip dilimleyici (Slicer) eklememizi sağladı.
+* **Yaş Boyutu (Age Dimension):** Verilerdeki anlamsız "Age code" sayılarını açıklamak için `EstablishmentAge.csv` dosyasını `Age` boyutu olarak modele dahil ettik. `Age code` üzerinden ilişki kurarak analizleri anlamlı metinlerle (`Establishment Age`) filtreleyebilir hale geldik.
+
+### 3. Boyut Hiyerarşileri
+Boyut (Dimension) tabloları genellikle kendi içlerinde bir mantıksal hiyerarşi barındırır.
+* `Industry` boyut tablomuzu incelediğimizde sektörlerin genelden özele doğru bir kırılımı (hiyerarşisi) olduğunu gördük: **`Sector > Subsector > Industry group > NAICS Code description`**. 
+* Bu hiyerarşileri görselleştirmelerde sırasıyla kullanarak "Matris (Matrix)" veya "Tablo" görsellerinde detaya inme (Drill-down) yeteneği kazanıyoruz.
+
+### 4. Kar Tanesi Şeması (Snowflake Schema) Tasarımı
+Power BI temelde Yıldız (Star) şema için optimize edilmiş olsa da, boyutların diğer boyutlara bağlandığı hiyerarşik durumlarda tabloları kendi içlerinde bölerek (normalize ederek) **Kar Tanesi (Snowflake)** şemasına geçiş yaptık:
+* **Hiyerarşiyi Parçalama:** `Industry` boyutunu Power Query'de 4 farklı sorguya çoğalttık ve her birini hiyerarşideki seviyelere göre adlandırdık: `Sector`, `Subsector`, `Industry group` ve `NAICS code`.
+* **İlişkileri Zincirleme Bağlama:** Her alt boyut tablosunu bir üst hiyerarşinin kodu ile birbirine (zincirleme şeklinde) bağladık. En uçtaki (en detaylı) `NAICS code` boyutunu da `Establishment Survey` olgu tablosuna bağladık.
+* **İlişkiyi Aktif Etme:** Eğer bağlantılarda noktalı (kesik) çizgiler oluşursa (Inactive Relationship), ilişkinin *Properties* (Özellikler) menüsünden **"Make this relationship active"** (Bu ilişkiyi etkinleştir) seçeneğiyle ilişkileri aktif hale getirmeyi deneyimledik.
