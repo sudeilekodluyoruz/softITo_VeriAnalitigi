@@ -77,3 +77,46 @@ Power BI temelde Yıldız (Star) şema için optimize edilmiş olsa da, boyutlar
 * **Hiyerarşiyi Parçalama:** `Industry` boyutunu Power Query'de 4 farklı sorguya çoğalttık ve her birini hiyerarşideki seviyelere göre adlandırdık: `Sector`, `Subsector`, `Industry group` ve `NAICS code`.
 * **İlişkileri Zincirleme Bağlama:** Her alt boyut tablosunu bir üst hiyerarşinin kodu ile birbirine (zincirleme şeklinde) bağladık. En uçtaki (en detaylı) `NAICS code` boyutunu da `Establishment Survey` olgu tablosuna bağladık.
 * **İlişkiyi Aktif Etme:** Eğer bağlantılarda noktalı (kesik) çizgiler oluşursa (Inactive Relationship), ilişkinin *Properties* (Özellikler) menüsünden **"Make this relationship active"** (Bu ilişkiyi etkinleştir) seçeneğiyle ilişkileri aktif hale getirmeyi deneyimledik.
+
+##  14. Gün: Veri Bilimi ve Makine Öğrenmesine (Machine Learning) Giriş (30 Ekim 2026)
+
+Bugün Veri Analitiği ve İş Zekası süreçlerinden bir adım öteye geçerek, **Veri Biliminin (Data Science)** kalbi olan **Makine Öğrenmesi (Machine Learning - ML)** konularına teorik bir giriş yaptık.
+
+### 1. Veri Bilimi (Data Science) Nedir?
+Veri Bilimi tek bir disiplin değil, üç temel yetkinliğin kesişim kümesidir:
+*   **Bilgisayar Bilimleri (Coding / Computer Science):** Veriyi işleme, temizleme ve algoritmaları kodlama (Python, SQL vb.).
+*   **Matematik ve İstatistik (Stats / Calculus / Linear Algebra):** Modellerin arkasındaki olasılık teorileri, hata hesaplamaları ve doğrusal cebir.
+*   **Etki Alanı Uzmanlığı (Domain Knowledge):** Verinin ait olduğu sektörü (finans, sağlık, perakende vb.) anlamak.
+*   Makine Öğrenmesi, Kodlama ve İstatistik alanlarının kesiştiği yerde bulunur. Eğer sadece kodlama ve alan bilgisi varsa bu "Tehlike Bölgesi (Danger Zone)" olarak adlandırılır çünkü istatistiksel doğrulama olmadan yapılan kodlamalar yanıltıcı sonuçlar verebilir.
+
+### 2. Geleneksel Programlama vs. Makine Öğrenmesi
+İki yaklaşım arasındaki temel felsefe farkını inceledik:
+*   **Geleneksel Programlama (Traditional Programming):** İnsanın yazdığı **Kurallar (Program/Mantık)** ve **Veri (Data)** bilgisayara verilir, bilgisayar bu kuralları işleterek bir **Çıktı (Output)** üretir.
+*   **Makine Öğrenmesi (Machine Learning):** Bilgisayara **Veri (Data)** ve olması gereken **Çıktılar (Observed Output)** verilir. Bilgisayar eğitim (training) aşamasında bu ikisi arasındaki ilişkiyi çözerek kendi **Kurallarını (Program/Model)** üretir. Bu üretilen model daha sonra test edilir ve yeni verilerle tahminler yapmak için kullanılır.
+
+### 3. Yapay Zeka (AI) Çemberi
+Bu kavramların birbiriyle olan hiyerarşik ilişkisini netleştirdik:
+1.  **Yapay Zeka (Artificial Intelligence - AI):** En dış ve en geniş halkadır. Makinelerin insan zekasını taklit etme kapasitesini kapsayan en genel kavramdır.
+2.  **Makine Öğrenmesi (Machine Learning - ML):** Yapay zekanın bir alt dalıdır. Sistemlerin açıkça programlanmadan, veriden öğrenerek (istatistiksel yöntemlerle) performansını artırmasıdır.
+3.  **Derin Öğrenme (Deep Learning):** Makine öğrenmesinin bir alt dalıdır. Çok katmanlı yapay sinir ağları (Neural Networks) kullanarak, insan beynine benzer şekilde (özellikle NLP, görüntü işleme gibi karmaşık işlerde) öğrenme sürecidir.
+
+### 4. Makine Öğrenmesinin Ana Kategorileri
+Makine öğrenmesi algoritmaları verinin yapısına ve ulaşılmak istenen hedefe göre iki ana dala ayrılır:
+
+**A. Gözetimli Öğrenme (Supervised Learning)**
+Elimizde etiketli (sonucu bilinen) veriler varsa kullanılır. İkiye ayrılır:
+*   **Sınıflandırma (Classification):** Çıktı kategorik bir değişkense (Örn: E-posta Spam mi değil mi?). Kullanılan algoritmalar: *Support Vector Machines (SVM), Naive Bayes, Nearest Neighbor, Discriminant Analysis*.
+*   **Regresyon (Regression):** Çıktı sürekli (sayısal) bir değişkense (Örn: Evin fiyatı ne kadar olacak?). Kullanılan algoritmalar: *Linear Regression (GLM), SVR, Decision Trees, Ensemble Methods (Random Forest vb.), Neural Networks*.
+
+**B. Gözetimsiz Öğrenme (Unsupervised Learning)**
+Elimizde etiketli (sonucu bilinen) bir veri *yoksa*, verinin kendi içindeki gizli yapıları veya örüntüleri (patterns) bulmak için kullanılır.
+*   **Kümeleme (Clustering):** Verileri benzerliklerine göre gruplara ayırır (Örn: Müşteri segmentasyonu). Kullanılan algoritmalar: *K-Means, K-Medoids, Fuzzy C-Means, Hierarchical Clustering, Gaussian Mixture, Hidden Markov Model*.
+*   *(Not: Sinir Ağları (Neural Networks) hem regresyon hem de kümeleme/sınıflandırma gibi farklı alanlarda kullanılabilen esnek bir yapıya sahiptir).*
+
+### 5. Makine Öğrenmesi İş Akışı
+Temel bir makine öğrenmesi modeli kurma süreci şu şekilde akar:
+1.  **Data (Veri):** Geçmiş veriler toplanır.
+2.  **Algorithm (Algoritma):** Veri uygun bir makine öğrenmesi algoritmasına (Örn: Lineer Regresyon) beslenir.
+3.  **Model:** Algoritma veriden öğrenerek bir matematiksel "Model" inşa eder.
+4.  **New Data (Yeni Veri):** Daha önce hiç görülmemiş yeni veriler bu eğitilmiş modele sokulur.
+5.  **Prediction (Tahmin):** Model, yeni veriler için sonuçları (tahminleri) üretir.
