@@ -16,7 +16,7 @@ Bu depo, **İstanbul Ticaret Odası** öncülüğünde yürütülen **SoftITo Ya
 
 * **Programlama Dili:** Python 3.15, SQL
 * **Veri Analizi & Manipülasyon:** Pandas, NumPy
-* **Veri Görselleştirme:** Matplotlib, Seaborn, Plotly
+* **Veri Görselleştirme:** Power BI, Matplotlib..
 * **Geliştirme Ortamları:** Jupyter Notebook, VS Code, Google Colab
 * **Veritabanı & Sorgulama:** PostgreSQL / MySQL, SQLite
 
